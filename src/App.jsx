@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import JobCard from './components/JobCard';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Grid } from '@mui/material';
+import { Grid, CircularProgress, Box } from '@mui/material';
 
 function App() {
   const [jobs, setJobs] = useState([]);
@@ -35,7 +35,6 @@ function App() {
         setOffset(prevOffset => prevOffset + 9);
 
         if (data.jdList.length === 0) {
-          // No more jobs to fetch
           setHasMore(false);
         }
       })
@@ -48,14 +47,22 @@ function App() {
         dataLength={jobs.length}
         next={fetchJobs}
         hasMore={hasMore}
-        loader={<h4>Loading...</h4>}
-        endMessage={<p>No more jobs to load</p>}
+        loader={
+          <Box display="flex" justifyContent="center" mt={2} minHeight="80px">
+            <CircularProgress />
+          </Box>
+        }
+        endMessage={
+          <Box textAlign="center" mt={2}>
+            <p>No more jobs to load</p>
+          </Box>
+        }
         scrollThreshold={0.9}
       >
-        <Grid container spacing={2} justifyContent="center">
+        <Grid container spacing={2} sx={{display:'flex', justifyContent: "space-around", padding: 2}}>
           {jobs.map((job, index) => (
             <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
-              <JobCard job={job} />
+              <JobCard jobData={job} />
             </Grid>
           ))}
         </Grid>
