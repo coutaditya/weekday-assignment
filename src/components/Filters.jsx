@@ -1,54 +1,41 @@
 import { Box, Grid, TextField } from '@mui/material';
 import Filter from './Filter';
-import { useEffect, useState } from 'react';
 import { ROLE_OPTIONS } from '../constants/constants';
 import { NUMBER_OF_EMPLOYEES_OPTIONS } from '../constants/constants';
 import { EXPERIENCE_OPTIONS } from '../constants/constants';
 import { MODE_OPTIONS } from '../constants/constants';
 import { MIN_SALARY_OPTIONS } from '../constants/constants';
+import { useDispatch } from 'react-redux';
+import { setFilter } from '../redux/actions';
 
-export function Filters({ filters, setFilters }) {
+export function Filters() {
+    const dispatch = useDispatch();
 
-    const [role, setRole] = useState([])
-    const [numberOfEmployees, setNumberOfEmployees] = useState([])
-    const [experience, setExperience] = useState([])
-    const [mode, setMode] = useState([])
-    const [minimumSalary, setMinimumSalary] = useState([])
-    const [companyName, setCompanyName] = useState('')
-
-    useEffect(()=> {
-        setFilters({
-            role: role,
-            numberOfEmployees: numberOfEmployees,
-            experience: experience,
-            mode: mode,
-            minimumSalary: minimumSalary,
-            companyName: companyName
-        })
-    }, [role, numberOfEmployees, experience, mode, minimumSalary, companyName])
+    const handleSetFilter = (filterName, value) => {
+        dispatch(setFilter(filterName, value));
+    };
     
-  
     return (
       <Box sx={{ flexGrow: 1, marginBottom: 2 }}>
         <Grid container spacing={2} justifyContent="center">
           <Grid item xs={12} sm={6} md={4} lg={2}>
-            <Filter options={ROLE_OPTIONS} placeholder="role" label="Roles" onChange={setRole}/>
+            <Filter options={ROLE_OPTIONS} placeholder="role" label="Roles" onChange={handleSetFilter}/>
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={2}>
-            <Filter options={NUMBER_OF_EMPLOYEES_OPTIONS} placeholder="numberOfEmployees" label="Number of Employees" onChange={setNumberOfEmployees}/>
+            <Filter options={NUMBER_OF_EMPLOYEES_OPTIONS} placeholder="numberOfEmployees" label="Number of Employees" onChange={handleSetFilter}/>
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={2}>
-            <Filter options={EXPERIENCE_OPTIONS} placeholder="experience" label="Experience" onChange={setExperience}/>
+            <Filter options={EXPERIENCE_OPTIONS} placeholder="experience" label="Experience" onChange={handleSetFilter}/>
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={2}>
-            <Filter options={MODE_OPTIONS} placeholder="mode" label="Mode" onChange={setMode}/>
+            <Filter options={MODE_OPTIONS} placeholder="mode" label="Mode" onChange={handleSetFilter}/>
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={2}>
-            <Filter options={MIN_SALARY_OPTIONS} placeholder="minimumSalary" label="Minimum Base Pay Salary" onChange={setMinimumSalary}/>
+            <Filter options={MIN_SALARY_OPTIONS} placeholder="minimumSalary" label="Minimum Base Pay Salary" onChange={handleSetFilter}/>
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={2}>
             <TextField fullWidth id="companyName" label="Search Company Name" variant="outlined" onChange={(event) => {
-                setCompanyName(event.target.value)
+                dispatch(setFilter("companyName", event.target.value))
             }}/>
           </Grid>
         </Grid>

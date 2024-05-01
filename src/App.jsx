@@ -1,27 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import './App.css';
 import JobCard from './components/JobCard';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Grid, CircularProgress, Box } from '@mui/material';
 import { Filters } from './components/Filters';
+import { useSelector } from 'react-redux';
 
 function App() {
+  // Why not maintain global state using redux for allJobs?
+  // Only single component uses this state hence global state is not required (this is more readable)
   const [allJobs, setAllJobs] = useState([]);
   const [jobs, setJobs] = useState([]); 
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  const [filters, setFilters] = useState({
-    role: [],
-    numberOfEmployees: [],
-    experience: [],
-    mode: [],
-    minimumSalary: [],
-    companyName: ''
-  });
+  // Access the global state for filters from redux store
+  const filters = useSelector(state => state.filters);
 
   function filterJobs(jobs, filters) {
-    console.log(filters)
     return jobs.filter(job => {
       // Role filter: match any of the selected roles
       const roleMatch = filters.role.length === 0 || filters.role.some(role => 
@@ -41,7 +36,7 @@ function App() {
         const minSalary = salaryRange.slice(0, -1)
         const jobMinSalary = Number(job.minJdSalary);
         const jobMaxSalary = Number(job.maxJdSalary);
-        return (jobMinSalary <= maxSalary && jobMaxSalary >= minSalary);
+        return (jobMinSalary >= minSalary);
       });
 
       //Could not add the check for company name as the API doesnot return a company name however it would look something like this
@@ -52,10 +47,12 @@ function App() {
     });
   }
 
+  // Fetch all jobs on initial render
   useEffect(() => {
     fetchJobs();
   }, []);
 
+  // function to make the api call and fetch jobs from backend
   const fetchJobs = () => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -92,7 +89,7 @@ function App() {
 
   return (
     <div className="App">
-      <Filters filters={filters} setFilters={setFilters} />
+      <Filters />
       <InfiniteScroll
         dataLength={jobs.length}
         next={fetchJobs}

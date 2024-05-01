@@ -13,11 +13,10 @@ export default function Filter({ options, placeholder, label, onChange }) {
 
   const handleChange = (event, newValue) => {
     setSelectedOptions(newValue);
+    // calls the dispatch action for the filters state stored in redux
+    onChange(placeholder, newValue.map(option => option.label));
   };
 
-  useEffect(() => {
-    onChange(selectedOptions.map(option => option.label));
-  }, [selectedOptions, onChange]);
 
   return (
     <Autocomplete

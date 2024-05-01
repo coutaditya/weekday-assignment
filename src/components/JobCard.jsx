@@ -26,11 +26,11 @@ function JobCard({ jobData }) {
     <Card sx={{
       maxWidth: 345,
       borderRadius: '16px',
-      boxShadow: '0 3px 5px 2px rgba(0, 0, 0, 0.12)', // Regular shadow
-      transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out', // Smooth transition for transform and shadow
+      boxShadow: '0 3px 5px 2px rgba(0, 0, 0, 0.12)',
+      transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
       '&:hover': {
-          boxShadow: '0 8px 16px 2px rgba(0,0,0,0.3)', // Elevated shadow on hover
-          transform: 'scale(1.05)' // Slightly scale up on hover
+          boxShadow: '0 8px 16px 2px rgba(0,0,0,0.3)',
+          transform: 'scale(1.05)'
       },
       mb: 2,
       ml: 2
@@ -108,10 +108,10 @@ function JobCard({ jobData }) {
             sx={{
             mb: 1,
             textTransform: 'none',
-            backgroundColor: '#4CAF50', // Example green color, adjust based on your theme or preference
-            color: '#ffffff', // Assuming white text
+            backgroundColor: '#4CAF50',
+            color: '#ffffff',
             '&:hover': {
-                backgroundColor: '#45A045' // Darker green on hover
+                backgroundColor: '#45A045'
             }
             }}
         >
@@ -122,10 +122,10 @@ function JobCard({ jobData }) {
             fullWidth
             sx={{
             textTransform: 'none',
-            backgroundColor: '#191970', // Example red color, adjust based on your theme or preference
-            color: '#ffffff', // Assuming white text
+            backgroundColor: '#191970', 
+            color: '#ffffff',
             '&:hover': {
-                backgroundColor: '#00008B' // Darker red on hover
+                backgroundColor: '#00008B'
             }
             }}
         >
