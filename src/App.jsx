@@ -61,7 +61,7 @@ function App() {
     myHeaders.append("Content-Type", "application/json");
 
     const raw = JSON.stringify({
-      "limit": 25,
+      "limit": 50,
       "offset": offset
     });
 
