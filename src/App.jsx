@@ -3,11 +3,54 @@ import './App.css';
 import JobCard from './components/JobCard';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Grid, CircularProgress, Box } from '@mui/material';
+import { Filters } from './components/Filters';
 
 function App() {
-  const [jobs, setJobs] = useState([]);
+  const [allJobs, setAllJobs] = useState([]);
+  const [jobs, setJobs] = useState([]); 
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+
+  const [filters, setFilters] = useState({
+    role: [],
+    numberOfEmployees: [],
+    experience: [],
+    mode: [],
+    minimumSalary: [],
+    companyName: ''
+  });
+
+  function filterJobs(jobs, filters) {
+    console.log(filters)
+    return jobs.filter(job => {
+      // Role filter: match any of the selected roles
+      const roleMatch = filters.role.length === 0 || filters.role.some(role => 
+        role.toLowerCase() === job.jobRole.toLowerCase()
+      );
+  
+      // Experience filter: assuming you have numerical ranges for experience; adjust as needed
+      const experienceMatch = filters.experience.length === 0 || filters.experience.some(exp => {
+        
+        const jobMinExp = Number(job.minExp);
+        const jobMaxExp = Number(job.maxExp);
+        return (exp <= jobMaxExp && exp >= jobMinExp);
+      });
+  
+      // Salary filter: match any of the salary ranges, assumes salaries are provided in some way
+      const salaryMatch = filters.minimumSalary.length === 0 || filters.minimumSalary.some(salaryRange => {
+        const minSalary = salaryRange.slice(0, -1)
+        const jobMinSalary = Number(job.minJdSalary);
+        const jobMaxSalary = Number(job.maxJdSalary);
+        return (jobMinSalary <= maxSalary && jobMaxSalary >= minSalary);
+      });
+
+      //Could not add the check for company name as the API doesnot return a company name however it would look something like this
+      // const companyNameMatch = filters.companyName.length === 0 || job.companyName.toLowerCase() === filters.companyName
+  
+      // Combine all matches with AND
+      return roleMatch &&  experienceMatch &&  salaryMatch;
+    });
+  }
 
   useEffect(() => {
     fetchJobs();
@@ -18,7 +61,7 @@ function App() {
     myHeaders.append("Content-Type", "application/json");
 
     const raw = JSON.stringify({
-      "limit": 9,
+      "limit": 25,
       "offset": offset
     });
 
@@ -31,7 +74,8 @@ function App() {
     fetch("https://api.weekday.technology/adhoc/getSampleJdJSON", requestOptions)
       .then(async (response) => {
         const data = await response.json();
-        setJobs(prevJobs => [...prevJobs, ...data.jdList]);
+        setJobs([...allJobs, ...data.jdList]);
+        setAllJobs(prevJobs => [...prevJobs, ...data.jdList])
         setOffset(prevOffset => prevOffset + 9);
 
         if (data.jdList.length === 0) {
@@ -39,10 +83,16 @@ function App() {
         }
       })
       .catch((error) => console.error(error));
-  };
+    };
+
+    useEffect(() => {
+      const filteredJobs = filterJobs(allJobs, filters);
+      setJobs(filteredJobs);
+    }, [allJobs, filters]);
 
   return (
     <div className="App">
+      <Filters filters={filters} setFilters={setFilters} />
       <InfiniteScroll
         dataLength={jobs.length}
         next={fetchJobs}

@@ -31,22 +31,30 @@ function JobCard({ jobData }) {
       ml: 2
     }}>
       <CardContent>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+        <Card sx={{
+            display: 'flex', alignItems: 'left', 
+            maxWidth: 150,
+            borderRadius: '12px',
+            boxShadow: '0 1px 1px 1px rgba(0, 0, 0, 0.12)',
+            mb: 2,
+            ml: 2,
+            p: 0.5
+            }}>
           <AccessTimeIcon sx={{ fontSize: 16, mr: 0.5 }} />
           <Typography variant="body2" color="text.secondary">
             Posted 6 days ago
           </Typography>
-        </Box>
+          </Card>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
           <Box sx={{
             width: 40,
-            height: 40,
+            height: 60,
             bgcolor: 'primary.main',
             color: 'white',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            borderRadius: '50%'
+            borderRadius: '0%'
           }}>
             {getInitials(jobData.jobRole)}
           </Box>
